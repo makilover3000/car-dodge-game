@@ -1,0 +1,88 @@
+.upload-root {
+  width: min(420px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  border-color: var(--biome-accent);
+}
+
+.upload-title {
+  font-size: 0.9rem;
+  color: var(--biome-accent);
+  letter-spacing: 0.1em;
+}
+
+/* ── Drop zone ── */
+.upload-drop-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-6) var(--sp-4);
+  border: 3px dashed var(--biome-muted);
+}
+
+.upload-file-btn {
+  font-size: 0.75rem;
+}
+
+.upload-hint {
+  font-size: 0.55rem;
+  color: var(--biome-muted);
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+/* ── Preview ── */
+.upload-preview-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.upload-preview-label {
+  font-size: 0.6rem;
+  color: var(--biome-muted);
+  align-self: flex-start;
+}
+
+.upload-preview-img {
+  image-rendering: pixelated;
+  border: 3px solid var(--biome-accent);
+  box-shadow: 0 0 12px var(--biome-glow);
+  display: block;
+}
+
+.upload-name-label {
+  font-size: 0.6rem;
+  color: var(--biome-muted);
+  align-self: flex-start;
+}
+
+.upload-name-input {
+  font-size: 0.9rem;
+}
+
+.upload-actions {
+  display: flex;
+  gap: var(--sp-4);
+  width: 100%;
+}
+
+.upload-actions .px-btn {
+  flex: 1;
+  text-align: center;
+  font-size: 0.7rem;
+}
+
+/* ── Error + cancel ── */
+.upload-error {
+  font-size: 0.6rem;
+  color: var(--ui-danger);
+}
+
+.upload-cancel {
+  font-size: 0.65rem;
+  align-self: flex-start;
+}

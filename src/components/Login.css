@@ -1,0 +1,124 @@
+.login-root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--ui-bg);
+  padding: var(--sp-4);
+}
+
+.login-terminal {
+  width: min(480px, 100%);
+  border: 3px solid var(--biome-accent);
+  background: #000;
+  padding: var(--sp-6) var(--sp-5);
+  box-shadow: 0 0 32px var(--biome-glow), 8px 8px 0 var(--biome-accent);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+/* ── Header ── */
+.login-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.login-title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.login-pixel-car {
+  color: var(--biome-accent);
+  font-size: 1.2rem;
+}
+
+.login-title {
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  color: var(--biome-accent);
+  text-shadow: 3px 3px 0 var(--ui-bg), 0 0 20px var(--biome-glow);
+  letter-spacing: 0.08em;
+}
+
+.login-subtitle {
+  font-size: 0.65rem;
+  color: var(--biome-muted);
+  letter-spacing: 0.15em;
+}
+
+/* ── Divider ── */
+.login-divider {
+  color: var(--biome-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* ── Prompt area ── */
+.login-prompt-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.login-prompt-line {
+  font-size: 0.75rem;
+  color: var(--biome-ink);
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.login-cursor-blink {
+  color: var(--biome-accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .login-cursor-blink {
+    animation: blink 1s step-end infinite;
+  }
+}
+
+.login-input {
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+}
+
+.login-error {
+  font-size: 0.6rem;
+  color: var(--ui-danger);
+  margin-top: calc(-1 * var(--sp-2));
+}
+
+.login-submit {
+  width: 100%;
+  text-align: center;
+  font-size: 0.8rem;
+  justify-content: center;
+}
+
+/* ── Footer ── */
+.login-footer {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  font-size: 0.6rem;
+  color: var(--biome-muted);
+  letter-spacing: 0.1em;
+}
+
+.login-footer-small {
+  margin-top: var(--sp-2);
+  color: var(--biome-accent);
+  font-size: 0.55rem;
+}
