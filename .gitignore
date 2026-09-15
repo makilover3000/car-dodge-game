@@ -1,6 +1,10 @@
 node_modules/
 dist/
 dist-ssr/
+
+# Vendored skill packs — each carries its own .git, ~48MB total
+skills/
+ui-ux-pro-max-skill/
 *.local
 .env.local
 .env.*.local

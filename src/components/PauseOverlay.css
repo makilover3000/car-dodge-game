@@ -1,0 +1,50 @@
+/* Sits over the canvas only, not the whole page. */
+.pause-backdrop {
+  position: absolute;
+}
+
+.pause-box {
+  width: min(340px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  align-items: center;
+  border-color: var(--biome-accent);
+  box-shadow: 4px 4px 0 var(--biome-accent), var(--shadow-xl);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pause-box {
+    animation: pause-in var(--duration-normal) var(--ease-out);
+  }
+}
+
+@keyframes pause-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.pause-title {
+  font-family: var(--font-pixel);
+  font-size: 1.4rem;
+  color: var(--biome-ink);
+  letter-spacing: 0.1em;
+}
+
+.pause-hint {
+  font-size: 1.2rem;
+  color: var(--biome-muted);
+  letter-spacing: 0.05em;
+}
+
+.pause-actions {
+  flex-direction: column;
+  width: 100%;
+  gap: var(--sp-3);
+}
+
+.pause-actions .px-btn {
+  width: 100%;
+  text-align: center;
+  font-size: 0.7rem;
+}

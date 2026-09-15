@@ -20,9 +20,10 @@ export function initPhaserGame(parent, ctx) {
     width: GAME_W,
     height: GAME_H,
     parent,
-    backgroundColor: '#07091a',
-    pixelArt: true,
-    antialias: false,
+    backgroundColor: '#BFE3FF',
+    pixelArt: false,
+    antialias: true,
+    roundPixels: false,
     scene: [BootScene, MenuScene, GameScene, GameOverScene],
     scale: {
       mode: Phaser.Scale.FIT,
@@ -34,5 +35,7 @@ export function initPhaserGame(parent, ctx) {
     },
   };
 
-  return new Phaser.Game(config);
+  const game = new Phaser.Game(config);
+  if (import.meta.env.DEV) window.__game = game;
+  return game;
 }

@@ -27,7 +27,7 @@
 }
 
 .upload-hint {
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   color: var(--biome-muted);
   letter-spacing: 0.05em;
   text-align: center;
@@ -42,20 +42,33 @@
 }
 
 .upload-preview-label {
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   color: var(--biome-muted);
   align-self: flex-start;
 }
 
-.upload-preview-img {
-  image-rendering: pixelated;
-  border: 3px solid var(--biome-accent);
-  box-shadow: 0 0 12px var(--biome-glow);
+.upload-crop-canvas {
+  width: 320px;
+  height: 320px;
+  max-width: 100%;
+  border: 3px solid var(--biome-ink);
+  border-radius: var(--r-2);
+  box-shadow: var(--shadow-md);
+  background: var(--ui-bg-sunk);
   display: block;
+  cursor: grab;
+  touch-action: none;
+}
+
+.upload-crop-canvas:active { cursor: grabbing; }
+
+.upload-zoom {
+  width: 100%;
+  accent-color: var(--biome-accent);
 }
 
 .upload-name-label {
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   color: var(--biome-muted);
   align-self: flex-start;
 }
@@ -78,7 +91,7 @@
 
 /* ── Error + cancel ── */
 .upload-error {
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   color: var(--ui-danger);
 }
 

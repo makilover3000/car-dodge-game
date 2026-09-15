@@ -3,6 +3,7 @@ import { gameEvents } from '../lib/gameEvents.js';
 import { supabase } from '../lib/supabase.js';
 import { initPhaserGame } from '../game/main.js';
 import HUD from './HUD.jsx';
+import PauseOverlay from './PauseOverlay.jsx';
 import './GameCanvas.css';
 
 export default function GameCanvas({ user, onGameOver }) {
@@ -15,10 +16,12 @@ export default function GameCanvas({ user, onGameOver }) {
 
     const selectedCarId = localStorage.getItem('selectedCarId');
     const customImageUrl = localStorage.getItem('selectedCarImageUrl') || undefined;
+    const coinImageUrl = localStorage.getItem('selectedCoinImageUrl') || undefined;
 
     gameRef.current = initPhaserGame(containerRef.current, {
       selectedCarId,
       customImageUrl,
+      coinImageUrl,
       username: user.username,
       userId: user.id,
     });
@@ -26,13 +29,16 @@ export default function GameCanvas({ user, onGameOver }) {
     // Focus the container so the Phaser canvas receives keyboard events
     containerRef.current?.focus();
 
-    async function handleScoreSubmit({ score }) {
+    async function handleScoreSubmit({ score, coins = 0 }) {
       if (!score) return;
       await supabase.from('scores').insert({
         user_id: user.id,
         username: user.username,
         score: Math.floor(score),
       });
+      if (coins > 0) {
+        await supabase.rpc('add_coins', { p_user_id: user.id, p_amount: coins });
+      }
     }
     gameEvents.on('score-submit', handleScoreSubmit);
 
@@ -60,6 +66,7 @@ export default function GameCanvas({ user, onGameOver }) {
         aria-label="Game canvas"
       />
       <HUD />
+      <PauseOverlay onQuit={onGameOver} />
     </div>
   );
 }

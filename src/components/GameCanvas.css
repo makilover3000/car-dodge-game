@@ -5,15 +5,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000;
+  background: var(--biome-bg);
 }
 
 .game-phaser-container {
   position: relative;
   outline: none;
+  box-shadow: var(--shadow-xl);
 }
 
 .game-phaser-container canvas {
   display: block;
-  image-rendering: pixelated;
 }
