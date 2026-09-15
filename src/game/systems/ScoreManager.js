@@ -1,4 +1,5 @@
-const BIOME_THRESHOLDS = [0, 500, 1000, 2000, 5000];
+import { WORLD_SPAN } from '../worlds/worldDefs.js';
+
 const SPEED_INTERVAL_MS   = 30_000; // speed bump every 30s
 const SPAWN_INTERVAL_MS   = 45_000; // spawn rate bump every 45s
 const BASE_SPEED          = 280;    // px/s
@@ -25,6 +26,9 @@ export default class ScoreManager {
 
   /** Returns current scroll speed in px/s. */
   get scrollSpeed() { return this.speed; }
+
+  /** Add a one-off score bonus, e.g. from collecting a coin. */
+  addBonus(points) { this.score += points; }
 
   /** Returns true first time side-swipers become available. */
   get sideSwipersUnlocked() { return this._sideSwipersUnlocked; }
@@ -78,13 +82,11 @@ export default class ScoreManager {
     }
   }
 
+  /** Worlds advance every WORLD_SPAN points and cycle forever. */
   _checkBiomeThreshold() {
-    const next = this._biomeIndex + 1;
-    if (next < BIOME_THRESHOLDS.length && this.score >= BIOME_THRESHOLDS[next]) {
-      this._biomeIndex = next;
-      if (window.gameEvents) {
-        window.gameEvents.emit('biome-threshold-crossed', { index: this._biomeIndex });
-      }
-    }
+    const step = Math.floor(this.score / WORLD_SPAN);
+    if (step === this._biomeIndex) return;
+    this._biomeIndex = step;
+    window.gameEvents?.emit('biome-threshold-crossed', { index: step });
   }
 }

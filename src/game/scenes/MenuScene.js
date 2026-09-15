@@ -21,16 +21,16 @@ export default class MenuScene extends Phaser.Scene {
     this.add.text(cx, 160, 'CAR DODGE', {
       fontFamily: "'Press Start 2P'",
       fontSize: '28px',
-      color: '#f5a623',
-      stroke: '#000',
+      color: '#EC4899',
+      stroke: '#0F172A',
       strokeThickness: 6,
-      shadow: { offsetX: 4, offsetY: 4, color: '#000', blur: 0, fill: true },
+      shadow: { offsetX: 4, offsetY: 4, color: '#0F172A', blur: 0, fill: true },
     }).setOrigin(0.5);
 
     this.add.text(cx, 210, 'SG EXPRESSWAY EDITION', {
       fontFamily: "'Press Start 2P'",
       fontSize: '9px',
-      color: '#5a6282',
+      color: '#0F172A',
     }).setOrigin(0.5);
   }
 
@@ -38,15 +38,16 @@ export default class MenuScene extends Phaser.Scene {
     const cx = GAME_W / 2;
     const lines = [
       ['WASD / ARROWS', 'MOVE'],
-      ['SPACE', 'NITRO BOOST (10S CD)'],
+      ['SPACE', 'NITRO BOOST'],
+      ['ESC / P', 'PAUSE'],
     ];
 
     lines.forEach(([key, val], i) => {
       this.add.text(cx - 20, 320 + i * 34, key, {
-        fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#5a6282',
+        fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#475569',
       }).setOrigin(1, 0);
       this.add.text(cx + 20, 320 + i * 34, val, {
-        fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#e8ecf4',
+        fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#0F172A',
       }).setOrigin(0, 0);
     });
   }
@@ -54,10 +55,10 @@ export default class MenuScene extends Phaser.Scene {
   _bindStart() {
     const cx = GAME_W / 2;
 
-    const prompt = this.add.text(cx, 440, 'PRESS SPACE TO START', {
+    const prompt = this.add.text(cx, 460, 'PRESS SPACE OR CLICK TO START', {
       fontFamily: "'Press Start 2P'",
       fontSize: '12px',
-      color: '#f5a623',
+      color: '#2563EB',
     }).setOrigin(0.5);
 
     this.tweens.add({
@@ -71,10 +72,12 @@ export default class MenuScene extends Phaser.Scene {
 
     this._onSpace = () => this.scene.start('GameScene');
     this.input.keyboard.on('keydown-SPACE', this._onSpace);
+    this.input.on('pointerdown', this._onSpace);
   }
 
   shutdown() {
     this.input.keyboard?.off('keydown-SPACE', this._onSpace);
+    this.input.off('pointerdown', this._onSpace);
   }
 
   update() {

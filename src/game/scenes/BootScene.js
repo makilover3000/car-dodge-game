@@ -22,18 +22,34 @@ export default class BootScene extends Phaser.Scene {
     this._generateCarTextures();
     this._generateObstacleTextures();
     this._generateRoadTextures();
+    this._generateCoinTexture();
   }
 
   create() {
-    // Check for a custom car image URL from the selected car
+    // Pull in whatever artwork the player uploaded for their car and coin
     const ctx = window.__gameCtx ?? {};
-    if (ctx.customImageUrl) {
-      this.load.image('car_custom', ctx.customImageUrl);
-      this.load.once('complete', () => this.scene.start('MenuScene'));
-      this.load.start();
-    } else {
+    const custom = [
+      ['car_custom',  ctx.customImageUrl],
+      ['coin_custom', ctx.coinImageUrl],
+    ].filter(([, url]) => !!url);
+
+    if (custom.length === 0) {
       this.scene.start('MenuScene');
+      return;
     }
+
+    custom.forEach(([key, url]) => this.load.image(key, url));
+    this.load.once('complete', () => {
+      // Uploaded art is photographic, so it must be sampled smoothly — the
+      // nearest-neighbour default would undo the quality we just preserved.
+      custom.forEach(([key]) => {
+        if (this.textures.exists(key)) {
+          this.textures.get(key).setFilter(Phaser.Textures.FilterMode.LINEAR);
+        }
+      });
+      this.scene.start('MenuScene');
+    });
+    this.load.start();
   }
 
   // ── Procedural texture generation (no sprite files needed) ──
@@ -70,18 +86,33 @@ export default class BootScene extends Phaser.Scene {
   }
 
   _generateRoadTextures() {
-    // Road tile: dark asphalt with dashed centre line
+    // Road tile: mid-grey asphalt with bright markings
     const g = this.make.graphics({ x: 0, y: 0, add: false });
-    g.fillStyle(0x1c2340);
+    g.fillStyle(0x6B7A99);
     g.fillRect(0, 0, GAME_W, 64);
     // Dashed centre line
-    g.fillStyle(0xf5a623, 0.6);
-    g.fillRect(GAME_W / 2 - 2, 0, 4, 40);
+    g.fillStyle(0xFFD24A, 0.95);
+    g.fillRect(GAME_W / 2 - 3, 0, 6, 40);
     // Road edge stripes
-    g.fillStyle(0xffffff, 0.3);
-    g.fillRect(60, 0, 4, 64);
-    g.fillRect(GAME_W - 64, 0, 4, 64);
+    g.fillStyle(0xffffff, 0.9);
+    g.fillRect(60, 0, 5, 64);
+    g.fillRect(GAME_W - 65, 0, 5, 64);
     g.generateTexture('road_tile', GAME_W, 64);
+    g.destroy();
+  }
+
+  /** Default collectible: a gold coin with a rim highlight. */
+  _generateCoinTexture() {
+    const g = this.make.graphics({ x: 0, y: 0, add: false });
+    g.fillStyle(0xB45309);
+    g.fillCircle(20, 20, 19);
+    g.fillStyle(0xF59E0B);
+    g.fillCircle(20, 20, 16);
+    g.fillStyle(0xFFD24A);
+    g.fillCircle(20, 20, 11);
+    g.fillStyle(0xFFFFFF, 0.55);
+    g.fillCircle(14, 13, 4);
+    g.generateTexture('coin_default', 40, 40);
     g.destroy();
   }
 

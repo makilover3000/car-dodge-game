@@ -1,60 +1,128 @@
+/* The canvas is FIT-scaled to viewport height at a 480:720 ratio, so the HUD
+   tracks that same width instead of spanning the whole window. */
 .hud-root {
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, calc(100vh * 0.6667));
   z-index: var(--z-hud);
   pointer-events: none;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: var(--sp-4) var(--sp-4);
-  background: linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, transparent 100%);
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+}
+
+/* Each cluster carries its own scrim so it stays legible over any world,
+   instead of darkening the whole top of the screen. */
+.hud-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-2);
+}
+
+.hud-score,
+.hud-lives,
+.hud-nitro,
+.hud-coins {
+  background: rgba(255, 255, 255, 0.82);
+  border: 2px solid var(--biome-ink);
+  border-radius: var(--r-3);
+  padding: var(--sp-2) var(--sp-3);
+  box-shadow: var(--shadow-md);
 }
 
 /* ── Score ── */
 .hud-score {
-  font-size: 1.6rem;
-  color: var(--biome-accent);
-  text-shadow: 0 0 12px var(--biome-glow), 2px 2px 0 #000;
+  font-family: var(--font-pixel);
+  font-size: 1.5rem;
+  color: var(--biome-ink);
   letter-spacing: 0.05em;
+}
+
+/* ── Coins ── */
+.hud-coins {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-pixel);
+  font-size: 0.85rem;
+  color: var(--ui-gold);
+}
+
+.hud-coin-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--r-full);
+  background: var(--ui-gold-bright);
+  border: 2px solid var(--ui-gold);
+  flex-shrink: 0;
 }
 
 /* ── Lives ── */
 .hud-lives {
   display: flex;
-  gap: var(--sp-3);
+  align-items: center;
+  gap: var(--sp-2);
 }
 
 .hud-heart {
-  font-size: 1.8rem;
-  font-style: normal;
-  transition: color 0.15s;
+  width: 40px;
+  height: 38px;
+  display: block;
+  flex-shrink: 0;
 }
 
-.hud-heart--full  { color: var(--ui-danger); text-shadow: 0 0 10px rgba(232,74,95,0.7); }
-.hud-heart--empty { color: var(--biome-muted); }
+.hud-heart path {
+  stroke: var(--biome-ink);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.hud-heart--full path {
+  fill: var(--ui-danger);
+}
+
+.hud-heart--empty path {
+  fill: #E2E8F0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hud-heart--full {
+    animation: heartbeat 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes heartbeat {
+  0%, 70%, 100% { transform: scale(1); }
+  35%           { transform: scale(1.08); }
+}
 
 /* ── Nitro bar ── */
 .hud-nitro {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 6px;
-  min-width: 110px;
+  gap: var(--sp-1);
+  min-width: 118px;
 }
 
 .hud-nitro-label {
-  font-size: 0.65rem;
+  font-family: var(--font-pixel);
+  font-size: 0.72rem;
   color: var(--biome-muted);
   letter-spacing: 0.12em;
 }
 
 .hud-nitro-track {
-  width: 110px;
-  height: 12px;
-  background: var(--ui-border);
-  border: 2px solid var(--biome-muted);
+  width: 100px;
+  height: 14px;
+  background: var(--ui-bg-sunk);
+  border: 2px solid var(--biome-ink);
+  border-radius: var(--r-1);
   overflow: hidden;
 }
 
@@ -66,5 +134,9 @@
 
 .hud-nitro-fill--active {
   background: var(--ui-safe);
-  box-shadow: 0 0 8px var(--ui-safe);
+}
+
+@media (max-width: 420px) {
+  .hud-score { font-size: 1.1rem; }
+  .hud-heart { width: 32px; height: 30px; }
 }

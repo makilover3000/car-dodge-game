@@ -1,137 +1,114 @@
 import { GAME_W, GAME_H } from '../constants.js';
+import WORLDS from '../worlds/worldDefs.js';
+import { buildWorldTextures, textureKeys, ROAD_GEOMETRY } from '../worlds/WorldBuilder.js';
 
 const TRANSITION_MS = 1500;
-const LOCK_MS       = 200;  // prevent double-fire
-
-const BIOMES = [
-  {
-    key: 'expressway',
-    roadColor:  0x1c2340,
-    skyColor:   0x0a1024,
-    palette: { bg: '#0a1024', accent: '#f5a623', accent2: '#e84a5f', ink: '#e8ecf4', glow: 'rgba(245,166,35,0.35)' },
-  },
-  {
-    key: 'sunset',
-    roadColor:  0x2d1515,
-    skyColor:   0x1a0a0a,
-    palette: { bg: '#1a0a0a', accent: '#ff6b35', accent2: '#e84a5f', ink: '#f5e6d3', glow: 'rgba(255,107,53,0.35)' },
-  },
-  {
-    key: 'neon',
-    roadColor:  0x0d0020,
-    skyColor:   0x05000f,
-    palette: { bg: '#05000f', accent: '#b44fff', accent2: '#00f5ff', ink: '#e8d4ff', glow: 'rgba(180,79,255,0.4)' },
-  },
-  {
-    key: 'space',
-    roadColor:  0x050518,
-    skyColor:   0x000010,
-    palette: { bg: '#000010', accent: '#00d4ff', accent2: '#7b2fff', ink: '#c8f0ff', glow: 'rgba(0,212,255,0.35)' },
-  },
-  {
-    key: 'glitch',
-    roadColor:  0x001100,
-    skyColor:   0x000000,
-    palette: { bg: '#000000', accent: '#00ff41', accent2: '#ff0099', ink: '#e0ffe0', glow: 'rgba(0,255,65,0.5)' },
-  },
-];
+const LOCK_MS       = 200;
 
 /**
- * BackgroundManager — scrolling biomes with crossfade transitions.
+ * BackgroundManager — renders the current world as four scrolling layers and
+ * crossfades to the next one when a score threshold is crossed.
+ *
+ * Layers scroll at different ratios so the world reads with depth: the ground
+ * and roadside move with the car, while weather sits in its own plane.
  */
 export default class BackgroundManager {
   /** @param {Phaser.Scene} scene */
   constructor(scene) {
     this.scene = scene;
-    this._currentIndex = 0;
+    this._index = 0;
     this._locked = false;
 
-    // Build the initial biome layers
-    this._current = this._buildLayers(BIOMES[0], 1);
+    // Bake every world up front — one-time cost, no hitching mid-run.
+    WORLDS.forEach(w => buildWorldTextures(scene, w));
 
-    // Store bound handler so we can unsubscribe cleanly in destroy()
+    this._current = this._buildLayers(WORLDS[0], 1);
+    this._announce(WORLDS[0]);
+
     this._onThresholdBound = d => this._onThreshold(d.index);
-    if (window.gameEvents) {
-      window.gameEvents.on('biome-threshold-crossed', this._onThresholdBound);
-    }
+    window.gameEvents?.on('biome-threshold-crossed', this._onThresholdBound);
   }
 
   /**
-   * Call every frame.
    * @param {number} scrollSpeed - px/s
    * @param {number} delta - ms
    */
   update(scrollSpeed, delta) {
     const shift = (scrollSpeed / 1000) * delta;
-    this._scrollLayers(this._current, shift);
-    if (this._incoming) this._scrollLayers(this._incoming, shift);
+    this._scroll(this._current, shift);
+    if (this._incoming) this._scroll(this._incoming, shift);
   }
 
-  _scrollLayers(layers, shift) {
-    layers.forEach(l => { l.tilePositionY -= shift; });
+  _scroll(layers, shift) {
+    layers.forEach(l => { l.tilePositionY -= shift * l.getData('ratio'); });
   }
 
-  _buildLayers(biome, alpha) {
-    const layers = [];
+  /** Build the four tileSprites for a world at a given starting alpha. */
+  _buildLayers(world, alpha) {
+    const keys = textureKeys(world.key);
+    const road = ROAD_GEOMETRY;
+    const particleRatio = world.particle.speedRatio ?? 1;
 
-    // Sky / background fill
-    const sky = this.scene.add.tileSprite(0, 0, GAME_W, GAME_H, 'road_tile')
-      .setOrigin(0, 0)
-      .setAlpha(alpha)
-      .setDepth(0)
-      .setTint(biome.skyColor);
-    layers.push(sky);
+    const specs = [
+      { key: keys.ground,    x: 0,        w: GAME_W,     depth: 0, ratio: 1 },
+      { key: keys.road,      x: road.x,   w: road.width, depth: 1, ratio: 1 },
+      { key: keys.decor,     x: 0,        w: GAME_W,     depth: 2, ratio: 1 },
+      { key: keys.particles, x: 0,        w: GAME_W,     depth: 3, ratio: particleRatio },
+    ];
 
-    // Road surface
-    const road = this.scene.add.tileSprite(GAME_W / 2 - 160, 0, 320, GAME_H, 'road_tile')
-      .setOrigin(0.5, 0)
-      .setAlpha(alpha)
-      .setDepth(1)
-      .setTint(biome.roadColor);
-    layers.push(road);
-
-    return layers;
+    return specs.map(s => {
+      const sprite = this.scene.add
+        .tileSprite(s.x, 0, s.w, GAME_H, s.key)
+        .setOrigin(0, 0)
+        .setAlpha(alpha)
+        .setDepth(s.depth);
+      sprite.setData('ratio', s.ratio);
+      return sprite;
+    });
   }
 
   _onThreshold(index) {
-    if (this._locked || index >= BIOMES.length) return;
+    const next = index % WORLDS.length;
+    if (this._locked || next === this._index) return;
     this._locked = true;
 
-    const biome = BIOMES[index];
-    this._incoming = this._buildLayers(biome, 0);
+    const world = WORLDS[next];
+    this._incoming = this._buildLayers(world, 0);
 
-    // Crossfade: incoming fades in, current fades out
     this.scene.tweens.add({
       targets: this._incoming,
       alpha: 1,
       duration: TRANSITION_MS,
-      ease: 'Sine.easeInOut',
+      ease: 'Cubic.easeInOut',
     });
+
     this.scene.tweens.add({
       targets: this._current,
       alpha: 0,
       duration: TRANSITION_MS,
-      ease: 'Sine.easeInOut',
+      ease: 'Cubic.easeInOut',
       onComplete: () => {
-        // Destroy outgoing layers
         this._current.forEach(l => l.destroy());
         this._current = this._incoming;
         this._incoming = null;
-        this._currentIndex = index;
-
-        // Propagate palette to React/CSS
-        if (window.gameEvents) {
-          window.gameEvents.emit('biome-changed', { key: biome.key, palette: biome.palette });
-        }
-
-        // Unlock after brief lockout
+        this._index = next;
+        this._announce(world);
         this.scene.time.delayedCall(LOCK_MS, () => { this._locked = false; });
       },
     });
   }
 
+  /** Tell React which world is active so the HUD palette follows it. */
+  _announce(world) {
+    window.gameEvents?.emit('biome-changed', {
+      key: world.key,
+      name: world.name,
+      palette: world.palette,
+    });
+  }
+
   destroy() {
-    if (window.gameEvents) window.gameEvents.off('biome-threshold-crossed', this._onThresholdBound);
+    window.gameEvents?.off('biome-threshold-crossed', this._onThresholdBound);
     this._current?.forEach(l => l.destroy());
     this._incoming?.forEach(l => l.destroy());
   }

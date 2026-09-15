@@ -1,35 +1,42 @@
-/* Press Start 2P pixel font loaded in index.html */
+/* Press Start 2P (display) + Chakra Petch (body/UI) loaded in index.html */
 
-/* ── Biome palette tokens (updated live by HUD on biome-changed) ── */
 :root {
-  /* Default: Singapore Expressway (day) */
-  --biome-bg:       #0a1024;
-  --biome-road:     #1c2340;
-  --biome-accent:   #f5a623;
-  --biome-accent2:  #e84a5f;
-  --biome-ink:      #e8ecf4;
-  --biome-muted:    #5a6282;
-  --biome-glow:     rgba(245, 166, 35, 0.35);
+  /* ── Surfaces ── */
+  --biome-bg:       #EFF6FF;   /* page ground, blue-tinted (never pure white) */
+  --biome-road:     #C7D7EC;
+  --ui-bg:          #FFFFFF;   /* raised card surface */
+  --ui-bg-sunk:     #F1F5FD;   /* recessed wells, grid slots */
 
-  /* Fixed UI tokens */
-  --ui-bg:          #07091a;
-  --ui-border:      #2a3060;
-  --ui-border-lit:  #f5a623;
-  --ui-danger:      #e84a5f;
-  --ui-safe:        #4ecdc4;
+  /* ── Ink ── */
+  --biome-ink:      #0F172A;   /* primary text, 16.9:1 on white */
+  --biome-muted:    #475569;   /* secondary text, 7.5:1 on white */
 
-  /* Typography */
+  /* ── Brand ── */
+  --biome-accent:   #2563EB;   /* electric blue — structure, primary actions */
+  --biome-accent2:  #EC4899;   /* hot magenta — the loud one, used sparingly */
+  --biome-glow:     rgba(37, 99, 235, 0.35);
+
+  /* ── Semantic ── */
+  --ui-border:      #D9E4F7;
+  --ui-border-lit:  #2563EB;
+  --ui-danger:      #DC2626;   /* hearts, damage, destructive */
+  --ui-safe:        #16A34A;   /* nitro ready */
+  --ui-gold:        #D97706;   /* coins + score (readable on light) */
+  --ui-gold-bright: #F59E0B;   /* coin fills, glow */
+
+  /* ── Typography ── */
   --font-pixel:     'Press Start 2P', 'Courier New', monospace;
-  --font-mono:      'VT323', monospace;
+  --font-body:      'Chakra Petch', system-ui, sans-serif;
+  --font-mono:      'Chakra Petch', ui-monospace, monospace;
 
-  /* Z-index scale */
+  /* ── Z-index scale ── */
   --z-canvas:    10;
   --z-hud:       20;
   --z-modal:     30;
-  --z-scanlines: 50;
   --z-overlay:   40;
+  --z-scanlines: 50;
 
-  /* Spacing rhythm (8px grid) */
+  /* ── Spacing (4px base) ── */
   --sp-1: 4px;
   --sp-2: 8px;
   --sp-3: 12px;
@@ -38,36 +45,41 @@
   --sp-6: 32px;
   --sp-7: 48px;
   --sp-8: 64px;
+  --sp-9: 96px;
+
+  /* ── Radius ── */
+  --r-0:  0px;
+  --r-1:  2px;
+  --r-2:  4px;
+  --r-3:  8px;
+  --r-4:  12px;
+  --r-5:  16px;
+  --r-full: 9999px;
+
+  /* ── Elevation (fixed ramp — no ad-hoc shadows) ── */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  /* Deliberate block-style offset — the one arcade flourish we keep */
+  --shadow-block: 4px 4px 0 var(--biome-ink);
+
+  /* ── Motion ── */
+  --duration-fast:   150ms;
+  --duration-normal: 200ms;
+  --duration-slow:   300ms;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
 }
 
-/* ── Biome overrides applied dynamically via JS ── */
-[data-biome="sunset"] {
-  --biome-bg:     #1a0a0a;
-  --biome-road:   #2d1515;
-  --biome-accent: #ff6b35;
-  --biome-glow:   rgba(255, 107, 53, 0.35);
-}
-[data-biome="neon"] {
-  --biome-bg:     #05000f;
-  --biome-road:   #0d0020;
-  --biome-accent: #b44fff;
-  --biome-accent2:#00f5ff;
-  --biome-glow:   rgba(180, 79, 255, 0.4);
-}
-[data-biome="space"] {
-  --biome-bg:     #000010;
-  --biome-road:   #050518;
-  --biome-accent: #00d4ff;
-  --biome-accent2:#7b2fff;
-  --biome-glow:   rgba(0, 212, 255, 0.35);
-}
-[data-biome="glitch"] {
-  --biome-bg:     #000000;
-  --biome-road:   #001100;
-  --biome-accent: #00ff41;
-  --biome-accent2:#ff0099;
-  --biome-glow:   rgba(0, 255, 65, 0.5);
-}
+/* ── Per-world palette overrides, applied at runtime by the HUD ── */
+[data-biome="expressway"] { --biome-accent: #1D4ED8; --biome-accent2: #FFAA00; --biome-glow: rgba(255,170,0,0.35); }
+[data-biome="sunset"]     { --biome-accent: #E76F51; --biome-accent2: #FF006E; --biome-glow: rgba(231,111,81,0.4); }
+[data-biome="tokyo"]      { --biome-accent: #BF00FF; --biome-accent2: #00FFFF; --biome-glow: rgba(191,0,255,0.4); }
+[data-biome="nyc"]        { --biome-accent: #B45309; --biome-accent2: #FFAA00; --biome-glow: rgba(255,170,0,0.35); }
+[data-biome="canyon"]     { --biome-accent: #B7472A; --biome-accent2: #F9A620; --biome-glow: rgba(249,166,32,0.4); }
+[data-biome="arctic"]     { --biome-accent: #4A6FA5; --biome-accent2: #22D3EE; --biome-glow: rgba(74,111,165,0.35); }
+[data-biome="space"]      { --biome-accent: #0066FF; --biome-accent2: #39FF14; --biome-glow: rgba(57,255,20,0.4); }
+[data-biome="glitch"]     { --biome-accent: #BF00FF; --biome-accent2: #CCFF00; --biome-glow: rgba(204,255,0,0.45); }
 
 /* ── Global reset & base ── */
 *, *::before, *::after {
@@ -76,14 +88,20 @@
   padding: 0;
 }
 
-html, body {
+html {
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+}
+
+body {
   width: 100%;
   height: 100%;
   background: var(--biome-bg);
   color: var(--biome-ink);
-  font-family: var(--font-pixel);
-  font-size: 10px;
-  image-rendering: pixelated;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
   overflow: hidden;
 }
 
@@ -93,8 +111,17 @@ html, body {
   position: relative;
 }
 
-/* ── CRT scanlines overlay ── */
-.scanlines {
+/* Tabular figures for any live-updating number, so digits never shift the layout */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* ── CRT scanlines — opt-in only, off by default ── */
+.scanlines { display: none; }
+
+[data-crt] .scanlines {
+  display: block;
   position: fixed;
   inset: 0;
   z-index: var(--z-scanlines);
@@ -103,40 +130,31 @@ html, body {
     to bottom,
     transparent 0px,
     transparent 2px,
-    rgba(0, 0, 0, 0.18) 2px,
-    rgba(0, 0, 0, 0.18) 4px
+    rgba(15, 23, 42, 0.05) 2px,
+    rgba(15, 23, 42, 0.05) 4px
   );
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .scanlines {
-    animation: scanlineFlicker 0.1s steps(1) infinite;
-  }
-}
-
-@keyframes scanlineFlicker {
-  0%   { opacity: 1; }
-  50%  { opacity: 0.92; }
-  100% { opacity: 1; }
-}
-
-/* ── Pixel button hover — 2px down shift ── */
+/* ── Pixel button — block style, hard offset shadow ── */
 .px-btn {
   display: inline-block;
   padding: var(--sp-3) var(--sp-5);
   background: var(--biome-accent);
-  color: var(--ui-bg);
+  color: #FFFFFF;
   font-family: var(--font-pixel);
   font-size: 0.8rem;
   border: 3px solid var(--biome-ink);
-  box-shadow: 4px 4px 0 var(--biome-ink);
+  border-radius: var(--r-0);
+  box-shadow: var(--shadow-block);
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  transition: none;
   user-select: none;
   position: relative;
   top: 0;
+  transition: box-shadow var(--duration-fast) var(--ease-out),
+              top var(--duration-fast) var(--ease-out),
+              background var(--duration-fast) ease-in-out;
 }
 
 .px-btn:hover {
@@ -150,57 +168,95 @@ html, body {
 }
 
 .px-btn:focus-visible {
-  outline: 3px solid var(--biome-accent2, var(--biome-accent));
-  outline-offset: 3px;
+  outline: 2px solid var(--biome-accent);
+  outline-offset: 2px;
 }
 
-.px-btn--danger {
-  background: var(--ui-danger);
+.px-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.px-btn--danger { background: var(--ui-danger); }
+
+.px-btn--gold {
+  background: var(--ui-gold-bright);
+  color: var(--biome-ink);
 }
 
 .px-btn--ghost {
-  background: transparent;
+  background: var(--ui-bg);
   color: var(--biome-accent);
   border-color: var(--biome-accent);
   box-shadow: 4px 4px 0 var(--biome-accent);
 }
 
-.px-btn--ghost:hover {
-  box-shadow: 2px 2px 0 var(--biome-accent);
-}
+.px-btn--ghost:hover { box-shadow: 2px 2px 0 var(--biome-accent); }
+.px-btn--ghost:active { box-shadow: none; }
 
-/* ── Pixel border card ── */
+/* ── Card ── */
 .px-card {
-  border: 3px solid var(--ui-border);
+  border: 3px solid var(--biome-ink);
   background: var(--ui-bg);
   padding: var(--sp-5);
   position: relative;
+  box-shadow: var(--shadow-block);
 }
 
 .px-card--lit {
   border-color: var(--biome-accent);
-  box-shadow: 0 0 12px var(--biome-glow), inset 0 0 6px rgba(0,0,0,0.4);
+  box-shadow: 4px 4px 0 var(--biome-accent), 0 0 16px var(--biome-glow);
 }
 
-/* ── Pixel input ── */
+/* ── Input ── */
 .px-input {
-  background: #000;
-  border: 3px solid var(--biome-accent);
-  color: var(--biome-accent);
+  background: var(--ui-bg);
+  border: 3px solid var(--biome-ink);
+  border-radius: var(--r-0);
+  color: var(--biome-ink);
   font-family: var(--font-pixel);
   font-size: 1rem;
   padding: var(--sp-3) var(--sp-4);
   width: 100%;
   outline: none;
   caret-color: var(--biome-accent);
+  transition: border-color var(--duration-fast) ease-in-out;
 }
 
-.px-input::placeholder {
-  color: var(--biome-muted);
-}
+.px-input::placeholder { color: var(--biome-muted); }
 
 .px-input:focus {
-  box-shadow: 0 0 8px var(--biome-glow);
+  border-color: var(--biome-accent);
+  outline: 2px solid var(--biome-accent);
+  outline-offset: 2px;
+}
+
+/* ── Modal (shared: garage delete confirm + in-game pause) ── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  background: rgba(15, 23, 42, 0.62);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+}
+
+.modal-box {
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-xl);
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--sp-4);
+  justify-content: center;
+  margin-top: var(--sp-5);
+  flex-wrap: wrap;
 }
 
 /* ── Utility ── */
@@ -209,6 +265,14 @@ html, body {
   width: 1px;
   height: 1px;
   overflow: hidden;
-  clip: rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -3,7 +3,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--ui-bg);
+  background: var(--biome-bg);
   overflow-y: auto;
   padding: 0 0 var(--sp-6);
 }
@@ -14,8 +14,8 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--sp-4) var(--sp-5);
-  border-bottom: 3px solid var(--biome-accent);
-  background: #000;
+  border-bottom: 3px solid var(--biome-ink);
+  background: var(--ui-bg);
   flex-shrink: 0;
 }
 
@@ -27,12 +27,11 @@
 
 .garage-title {
   font-size: 1.1rem;
-  color: var(--biome-accent);
-  text-shadow: 0 0 10px var(--biome-glow);
+  color: var(--biome-ink);
 }
 
 .garage-player {
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   color: var(--biome-muted);
 }
 
@@ -42,7 +41,7 @@
 }
 
 .garage-btn-sm {
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   padding: var(--sp-2) var(--sp-3);
 }
 
@@ -53,10 +52,13 @@
   flex-direction: column;
   gap: var(--sp-4);
   flex: 1;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
 }
 
 .garage-count {
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   color: var(--biome-muted);
 }
 
@@ -68,30 +70,34 @@
 
 /* ── Car slot ── */
 .garage-car-slot {
-  border: 3px solid var(--ui-border);
-  background: #050818;
+  border: 3px solid var(--biome-ink);
+  background: var(--ui-bg);
   padding: var(--sp-4);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--sp-3);
   cursor: pointer;
-  transition: none;
   position: relative;
   text-align: center;
+  box-shadow: var(--shadow-block);
+  top: 0;
+  transition: box-shadow var(--duration-fast) var(--ease-out),
+              top var(--duration-fast) var(--ease-out);
 }
 
 .garage-car-slot:hover {
-  border-color: var(--biome-muted);
+  top: 2px;
+  box-shadow: 2px 2px 0 var(--biome-ink);
 }
 
 .garage-car-slot--selected {
   border-color: var(--biome-accent);
-  box-shadow: 0 0 14px var(--biome-glow), inset 0 0 8px rgba(0,0,0,0.5);
+  box-shadow: 4px 4px 0 var(--biome-accent), 0 0 18px var(--biome-glow);
 }
 
 .garage-car-slot:focus-visible {
-  outline: 3px solid var(--biome-accent);
+  outline: 2px solid var(--biome-accent);
   outline-offset: 2px;
 }
 
@@ -109,13 +115,17 @@
   width: 64px;
   height: 64px;
   background: var(--car-color, #888);
-  image-rendering: pixelated;
-  box-shadow: 3px 3px 0 rgba(0,0,0,0.6);
+  border-radius: var(--r-2);
+  box-shadow: var(--shadow-md);
 }
 
+/* Uploaded artwork renders at full quality — never nearest-sampled. */
 .garage-car-img {
-  image-rendering: pixelated;
   display: block;
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  border-radius: var(--r-2);
 }
 
 .garage-car-selected-badge {
@@ -129,7 +139,7 @@
 
 /* ── Labels ── */
 .garage-car-name {
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   color: var(--biome-ink);
   word-break: break-word;
   letter-spacing: 0.05em;
@@ -143,10 +153,24 @@
   text-align: center;
 }
 
+/* Destructive, rarely used — stays quiet until you reach for it. */
 .garage-delete-btn {
-  font-size: 0.5rem;
+  font-size: 0.62rem;
   padding: var(--sp-1) var(--sp-3);
-  align-self: stretch;
+  align-self: center;
+  margin-top: auto;
+  background: transparent;
+  color: var(--biome-muted);
+  border: 2px solid var(--ui-border);
+  box-shadow: none;
+}
+
+.garage-delete-btn:hover {
+  top: 0;
+  background: var(--ui-danger);
+  border-color: var(--ui-danger);
+  color: #FFFFFF;
+  box-shadow: none;
 }
 
 /* ── Add slot ── */
@@ -172,12 +196,12 @@
 }
 
 .garage-add-label {
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   color: var(--biome-muted);
 }
 
 .garage-cap-msg {
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   color: var(--ui-danger);
   text-align: center;
 }
@@ -191,10 +215,98 @@
 }
 
 .garage-error {
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   color: var(--ui-danger);
   text-align: center;
   padding: 0 var(--sp-5);
+}
+
+/* ── Coin balance chip ── */
+.garage-coin-balance {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-pixel);
+  font-size: 0.72rem;
+  color: var(--ui-gold);
+  padding: var(--sp-2) var(--sp-3);
+  border: 2px solid var(--ui-gold-bright);
+  border-radius: var(--r-3);
+  background: #FFFBEB;
+}
+
+.garage-coin-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--r-full);
+  background: var(--ui-gold-bright);
+  border: 2px solid var(--ui-gold);
+}
+
+/* ── Coin skin picker ── */
+.garage-coin-section {
+  padding: 0 var(--sp-5) var(--sp-4);
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.garage-coin-row {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.garage-coin-slot {
+  width: 96px;
+  padding: var(--sp-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  background: var(--ui-bg);
+  border: 3px solid var(--biome-ink);
+  box-shadow: var(--shadow-block);
+  cursor: pointer;
+  top: 0;
+  position: relative;
+  transition: box-shadow var(--duration-fast) var(--ease-out),
+              top var(--duration-fast) var(--ease-out);
+}
+
+.garage-coin-slot:hover { top: 2px; box-shadow: 2px 2px 0 var(--biome-ink); }
+.garage-coin-slot:focus-visible { outline: 2px solid var(--biome-accent); outline-offset: 2px; }
+
+.garage-coin-slot--selected {
+  border-color: var(--ui-gold);
+  box-shadow: 4px 4px 0 var(--ui-gold-bright);
+}
+
+.garage-coin-slot--add { border-style: dashed; background: transparent; }
+
+.garage-coin-default {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-full);
+  background: var(--ui-gold-bright);
+  border: 3px solid var(--ui-gold);
+}
+
+.garage-coin-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: var(--r-full);
+}
+
+.garage-coin-name {
+  font-size: 0.62rem;
+  color: var(--biome-muted);
+  word-break: break-word;
+  text-align: center;
 }
 
 /* ── Start area ── */
@@ -211,25 +323,10 @@
   letter-spacing: 0.1em;
 }
 
-/* ── Modal ── */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  z-index: var(--z-modal);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--sp-4);
-}
-
-.modal-box {
-  width: min(360px, 100%);
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-5);
+/* ── Delete-confirm modal (base styles live in tokens.css) ── */
+.modal-box--danger {
   border-color: var(--ui-danger);
-  box-shadow: 0 0 24px rgba(232, 74, 95, 0.4);
+  box-shadow: 4px 4px 0 var(--ui-danger), var(--shadow-xl);
 }
 
 .modal-question {
@@ -240,11 +337,6 @@
 .modal-warning {
   font-size: 0.65rem;
   color: var(--ui-danger);
-}
-
-.modal-actions {
-  display: flex;
-  gap: var(--sp-4);
 }
 
 .modal-actions .px-btn {
