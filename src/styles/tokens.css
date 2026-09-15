@@ -1,0 +1,214 @@
+/* Press Start 2P pixel font loaded in index.html */
+
+/* ── Biome palette tokens (updated live by HUD on biome-changed) ── */
+:root {
+  /* Default: Singapore Expressway (day) */
+  --biome-bg:       #0a1024;
+  --biome-road:     #1c2340;
+  --biome-accent:   #f5a623;
+  --biome-accent2:  #e84a5f;
+  --biome-ink:      #e8ecf4;
+  --biome-muted:    #5a6282;
+  --biome-glow:     rgba(245, 166, 35, 0.35);
+
+  /* Fixed UI tokens */
+  --ui-bg:          #07091a;
+  --ui-border:      #2a3060;
+  --ui-border-lit:  #f5a623;
+  --ui-danger:      #e84a5f;
+  --ui-safe:        #4ecdc4;
+
+  /* Typography */
+  --font-pixel:     'Press Start 2P', 'Courier New', monospace;
+  --font-mono:      'VT323', monospace;
+
+  /* Z-index scale */
+  --z-canvas:    10;
+  --z-hud:       20;
+  --z-modal:     30;
+  --z-scanlines: 50;
+  --z-overlay:   40;
+
+  /* Spacing rhythm (8px grid) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+}
+
+/* ── Biome overrides applied dynamically via JS ── */
+[data-biome="sunset"] {
+  --biome-bg:     #1a0a0a;
+  --biome-road:   #2d1515;
+  --biome-accent: #ff6b35;
+  --biome-glow:   rgba(255, 107, 53, 0.35);
+}
+[data-biome="neon"] {
+  --biome-bg:     #05000f;
+  --biome-road:   #0d0020;
+  --biome-accent: #b44fff;
+  --biome-accent2:#00f5ff;
+  --biome-glow:   rgba(180, 79, 255, 0.4);
+}
+[data-biome="space"] {
+  --biome-bg:     #000010;
+  --biome-road:   #050518;
+  --biome-accent: #00d4ff;
+  --biome-accent2:#7b2fff;
+  --biome-glow:   rgba(0, 212, 255, 0.35);
+}
+[data-biome="glitch"] {
+  --biome-bg:     #000000;
+  --biome-road:   #001100;
+  --biome-accent: #00ff41;
+  --biome-accent2:#ff0099;
+  --biome-glow:   rgba(0, 255, 65, 0.5);
+}
+
+/* ── Global reset & base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: var(--biome-bg);
+  color: var(--biome-ink);
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  image-rendering: pixelated;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* ── CRT scanlines overlay ── */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-scanlines);
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.18) 2px,
+    rgba(0, 0, 0, 0.18) 4px
+  );
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scanlines {
+    animation: scanlineFlicker 0.1s steps(1) infinite;
+  }
+}
+
+@keyframes scanlineFlicker {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.92; }
+  100% { opacity: 1; }
+}
+
+/* ── Pixel button hover — 2px down shift ── */
+.px-btn {
+  display: inline-block;
+  padding: var(--sp-3) var(--sp-5);
+  background: var(--biome-accent);
+  color: var(--ui-bg);
+  font-family: var(--font-pixel);
+  font-size: 0.8rem;
+  border: 3px solid var(--biome-ink);
+  box-shadow: 4px 4px 0 var(--biome-ink);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: none;
+  user-select: none;
+  position: relative;
+  top: 0;
+}
+
+.px-btn:hover {
+  top: 2px;
+  box-shadow: 2px 2px 0 var(--biome-ink);
+}
+
+.px-btn:active {
+  top: 4px;
+  box-shadow: none;
+}
+
+.px-btn:focus-visible {
+  outline: 3px solid var(--biome-accent2, var(--biome-accent));
+  outline-offset: 3px;
+}
+
+.px-btn--danger {
+  background: var(--ui-danger);
+}
+
+.px-btn--ghost {
+  background: transparent;
+  color: var(--biome-accent);
+  border-color: var(--biome-accent);
+  box-shadow: 4px 4px 0 var(--biome-accent);
+}
+
+.px-btn--ghost:hover {
+  box-shadow: 2px 2px 0 var(--biome-accent);
+}
+
+/* ── Pixel border card ── */
+.px-card {
+  border: 3px solid var(--ui-border);
+  background: var(--ui-bg);
+  padding: var(--sp-5);
+  position: relative;
+}
+
+.px-card--lit {
+  border-color: var(--biome-accent);
+  box-shadow: 0 0 12px var(--biome-glow), inset 0 0 6px rgba(0,0,0,0.4);
+}
+
+/* ── Pixel input ── */
+.px-input {
+  background: #000;
+  border: 3px solid var(--biome-accent);
+  color: var(--biome-accent);
+  font-family: var(--font-pixel);
+  font-size: 1rem;
+  padding: var(--sp-3) var(--sp-4);
+  width: 100%;
+  outline: none;
+  caret-color: var(--biome-accent);
+}
+
+.px-input::placeholder {
+  color: var(--biome-muted);
+}
+
+.px-input:focus {
+  box-shadow: 0 0 8px var(--biome-glow);
+}
+
+/* ── Utility ── */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}

@@ -1,0 +1,70 @@
+.hud-root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-hud);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-4) var(--sp-4);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, transparent 100%);
+}
+
+/* ── Score ── */
+.hud-score {
+  font-size: 1.6rem;
+  color: var(--biome-accent);
+  text-shadow: 0 0 12px var(--biome-glow), 2px 2px 0 #000;
+  letter-spacing: 0.05em;
+}
+
+/* ── Lives ── */
+.hud-lives {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+.hud-heart {
+  font-size: 1.8rem;
+  font-style: normal;
+  transition: color 0.15s;
+}
+
+.hud-heart--full  { color: var(--ui-danger); text-shadow: 0 0 10px rgba(232,74,95,0.7); }
+.hud-heart--empty { color: var(--biome-muted); }
+
+/* ── Nitro bar ── */
+.hud-nitro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 110px;
+}
+
+.hud-nitro-label {
+  font-size: 0.65rem;
+  color: var(--biome-muted);
+  letter-spacing: 0.12em;
+}
+
+.hud-nitro-track {
+  width: 110px;
+  height: 12px;
+  background: var(--ui-border);
+  border: 2px solid var(--biome-muted);
+  overflow: hidden;
+}
+
+.hud-nitro-fill {
+  height: 100%;
+  background: var(--biome-accent);
+  transition: width 0.1s linear;
+}
+
+.hud-nitro-fill--active {
+  background: var(--ui-safe);
+  box-shadow: 0 0 8px var(--ui-safe);
+}

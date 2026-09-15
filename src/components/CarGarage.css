@@ -1,0 +1,254 @@
+.garage-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--ui-bg);
+  overflow-y: auto;
+  padding: 0 0 var(--sp-6);
+}
+
+/* ── Header ── */
+.garage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 3px solid var(--biome-accent);
+  background: #000;
+  flex-shrink: 0;
+}
+
+.garage-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-4);
+}
+
+.garage-title {
+  font-size: 1.1rem;
+  color: var(--biome-accent);
+  text-shadow: 0 0 10px var(--biome-glow);
+}
+
+.garage-player {
+  font-size: 0.6rem;
+  color: var(--biome-muted);
+}
+
+.garage-header-right {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+.garage-btn-sm {
+  font-size: 0.6rem;
+  padding: var(--sp-2) var(--sp-3);
+}
+
+/* ── Grid ── */
+.garage-grid-section {
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  flex: 1;
+}
+
+.garage-count {
+  font-size: 0.6rem;
+  color: var(--biome-muted);
+}
+
+.garage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--sp-4);
+}
+
+/* ── Car slot ── */
+.garage-car-slot {
+  border: 3px solid var(--ui-border);
+  background: #050818;
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  cursor: pointer;
+  transition: none;
+  position: relative;
+  text-align: center;
+}
+
+.garage-car-slot:hover {
+  border-color: var(--biome-muted);
+}
+
+.garage-car-slot--selected {
+  border-color: var(--biome-accent);
+  box-shadow: 0 0 14px var(--biome-glow), inset 0 0 8px rgba(0,0,0,0.5);
+}
+
+.garage-car-slot:focus-visible {
+  outline: 3px solid var(--biome-accent);
+  outline-offset: 2px;
+}
+
+/* ── Car art ── */
+.garage-car-art {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.garage-car-rect {
+  width: 64px;
+  height: 64px;
+  background: var(--car-color, #888);
+  image-rendering: pixelated;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.6);
+}
+
+.garage-car-img {
+  image-rendering: pixelated;
+  display: block;
+}
+
+.garage-car-selected-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  color: var(--biome-accent);
+  font-size: 0.8rem;
+  text-shadow: 0 0 6px var(--biome-glow);
+}
+
+/* ── Labels ── */
+.garage-car-name {
+  font-size: 0.55rem;
+  color: var(--biome-ink);
+  word-break: break-word;
+  letter-spacing: 0.05em;
+}
+
+.garage-car-desc {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--biome-muted);
+  line-height: 1.3;
+  text-align: center;
+}
+
+.garage-delete-btn {
+  font-size: 0.5rem;
+  padding: var(--sp-1) var(--sp-3);
+  align-self: stretch;
+}
+
+/* ── Add slot ── */
+.garage-add-slot {
+  border-style: dashed;
+  border-color: var(--biome-muted);
+  background: transparent;
+  justify-content: center;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.garage-add-slot:hover {
+  border-color: var(--biome-accent);
+}
+
+.garage-add-icon {
+  font-size: 2rem;
+  color: var(--biome-muted);
+  font-family: var(--font-mono);
+}
+
+.garage-add-label {
+  font-size: 0.55rem;
+  color: var(--biome-muted);
+}
+
+.garage-cap-msg {
+  font-size: 0.6rem;
+  color: var(--ui-danger);
+  text-align: center;
+}
+
+/* ── Loading / error ── */
+.garage-loading {
+  font-size: 0.8rem;
+  color: var(--biome-muted);
+  text-align: center;
+  padding: var(--sp-7);
+}
+
+.garage-error {
+  font-size: 0.6rem;
+  color: var(--ui-danger);
+  text-align: center;
+  padding: 0 var(--sp-5);
+}
+
+/* ── Start area ── */
+.garage-start-area {
+  padding: var(--sp-5);
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.garage-start-btn {
+  font-size: 1rem;
+  padding: var(--sp-4) var(--sp-7);
+  letter-spacing: 0.1em;
+}
+
+/* ── Modal ── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+}
+
+.modal-box {
+  width: min(360px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  border-color: var(--ui-danger);
+  box-shadow: 0 0 24px rgba(232, 74, 95, 0.4);
+}
+
+.modal-question {
+  font-size: 0.9rem;
+  color: var(--biome-ink);
+}
+
+.modal-warning {
+  font-size: 0.65rem;
+  color: var(--ui-danger);
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--sp-4);
+}
+
+.modal-actions .px-btn {
+  flex: 1;
+  text-align: center;
+  font-size: 0.7rem;
+}
